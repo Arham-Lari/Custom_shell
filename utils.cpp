@@ -1,10 +1,13 @@
 #include "utils.h"    
 #include <cstddef>
+#include <sys/wait.h>
+#include <unistd.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <sys/types.h>
 
-char* Utils::read_line(){
+char* Utils::read_line(void){
     #define size_buffer 1024 
 
     //to store the buffer size
@@ -70,21 +73,28 @@ char** Utils::split_line(char *line){
 
     std::size_t position = 0;
 
+    //initize the buffer the size
     std::size_t bufsize = TOKEN_SIZE;
+
+    //assinging the memory storage for the tokens
     char **tokens = static_cast<char**>(malloc(sizeof(char*)*bufsize));
 
+    //to store each world 
     char *token;
 
+    //checking if memory is successfully allocated
     if(!tokens){
         fprintf(stderr, "cannot able to allocate memory for tokens\n");
         exit(EXIT_FAILURE);
     }
 
+    //it store the pointer of the start of the word
     token = strtok(line, TOKEN_DELIMA);
     while(token != NULL){
         tokens[position] = token;
         position++;
 
+        //assinging the more memory for the token as the space run out
         if(position >= bufsize){
             bufsize += TOKEN_SIZE;
             tokens = static_cast<char**>(realloc(tokens, bufsize));
@@ -98,5 +108,33 @@ char** Utils::split_line(char *line){
 
     tokens[position] = NULL;
     return tokens;
+
+}
+
+int Utils::execute(char **args){
+ 
+    pid_t pid , wid;
+    int status;
+
+    pid = fork();
+
+    if(pid == 0){
+
+        if(execvp(args[0], args) == -1){
+            perror("error");
+        }
+        exit(EXIT_FAILURE);
+
+    }else if(pid < 0){
+        perror("error");
+    }else{
+        do{
+
+            wid = waitpid(pid,&status,WUNTRACED);
+
+        }while(!WIFEXITED(status));
+    }
+
+    return 1;
 
 }
