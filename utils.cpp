@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 char* Utils::read_line(){
     #define size_buffer 1024 
@@ -56,7 +57,46 @@ char* Utils::read_line(){
                 exit(EXIT_FAILURE);
             }
         }
+
+        
     }
 
+
+}
+
+char** Utils::split_line(char *line){
+#define TOKEN_SIZE 64
+#define TOKEN_DELIMA " \t\r\n\a"
+
+    std::size_t position = 0;
+
+    std::size_t bufsize = TOKEN_SIZE;
+    char **tokens = static_cast<char**>(malloc(sizeof(char*)*bufsize));
+
+    char *token;
+
+    if(!tokens){
+        fprintf(stderr, "cannot able to allocate memory for tokens\n");
+        exit(EXIT_FAILURE);
+    }
+
+    token = strtok(line, TOKEN_DELIMA);
+    while(token != NULL){
+        tokens[position] = token;
+        position++;
+
+        if(position >= bufsize){
+            bufsize += TOKEN_SIZE;
+            tokens = static_cast<char**>(realloc(tokens, bufsize));
+
+            if(!tokens){
+                fprintf(stderr, "cannot able to increase the memory for the token \n");
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+
+    tokens[position] = NULL;
+    return tokens;
 
 }
