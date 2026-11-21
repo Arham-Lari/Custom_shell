@@ -1,5 +1,41 @@
 #include "utils.h"
+#include <unistd.h>
+#include <cstddef>
 #include <cstdio>
+
+//built in shell command
+int cd(char** argv);
+int help(char** argv);
+int exit(char** argv);
+
+const char *builtin_str[] = {
+  "cd",
+  "help",
+  "exit"
+};
+
+int (*builtin_func[])(char**) = {
+  &cd,
+  &help,
+  &exit,
+};
+
+int num_builtins(){
+  return sizeof(builtin_str)/sizeof(char*);
+}
+
+int cd(char **argv){
+   if(argv[1] == NULL){
+     fprintf(stderr, "expected arguument to \"cd\"\n");
+   }else{
+     if(chdir(argv[0]) != 0){
+       perror("lsh");
+     }
+   }
+
+   return 1;
+}
+
 int main(int argc , char **argv){
 
     Utils *utils = new Utils;
