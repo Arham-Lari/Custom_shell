@@ -1,8 +1,11 @@
 #include "utils.h"
 #include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <cstddef>
 #include <cstdio>
+
+Utils *utils = new Utils;
 
 //built in shell command
 int cd(char** argv);
@@ -56,10 +59,24 @@ int exit(char **argv){
   return 0;
 }
 
+int execute(char **argv){
+  int i;
+
+  if(argv[0] == NULL){
+    return 1;
+  }
+
+  for (i = 0; i< num_builtins(); i++){
+    if(strcmp(argv[0], builtin_str[i]) == 0){
+      return (*builtin_func[i])(argv);
+    }
+  }
+
+  return utils->launch(argv);
+}
+
 int main(int argc , char **argv){
 
-    Utils *utils = new Utils;
-    
     char *line;
     char **args;
     int status;
@@ -67,7 +84,7 @@ int main(int argc , char **argv){
         printf("> ");
         line = utils->read_line();
         args = utils->split_line(line);
-        status = utils->execute(args);
+        status = utils->launch(args);
     }while(status);
 
     delete utils;

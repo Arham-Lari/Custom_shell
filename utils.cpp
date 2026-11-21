@@ -111,7 +111,7 @@ char** Utils::split_line(char *line){
 
 }
 
-int Utils::execute(char **args){
+int Utils::launch(char **args){
  
     pid_t pid , wid;
     int status;
