@@ -84,7 +84,7 @@ int main(int argc , char **argv){
         printf("> ");
         line = utils->read_line();
         args = utils->split_line(line);
-        status = utils->launch(args);
+        status = execute(argv);
     }while(status);
 
     delete utils;
