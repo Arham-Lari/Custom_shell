@@ -36,6 +36,21 @@ int cd(char **argv){
    return 1;
 }
 
+int help(char **argv){
+  int i;
+  printf("Arham's LSH\n");
+  printf("the program names and arguments , and hit enter .\n");
+  printf("the following are built in :\n");
+
+  for(i =0 ; i< num_builtins(); i++){
+    printf(" %s\n",builtin_str[i]);
+  }
+
+  printf("Use the man command for inforamtion on other programs");
+
+  return 1;
+}
+
 int main(int argc , char **argv){
 
     Utils *utils = new Utils;
