@@ -97,7 +97,7 @@ char** Utils::split_line(char *line){
         //assinging the more memory for the token as the space run out
         if(position >= bufsize){
             bufsize += TOKEN_SIZE;
-            tokens = static_cast<char**>(realloc(tokens, bufsize));
+            tokens = static_cast<char**>(realloc(tokens, sizeof(char*)*bufsize));
 
             if(!tokens){
                 fprintf(stderr, "cannot able to increase the memory for the token \n");
