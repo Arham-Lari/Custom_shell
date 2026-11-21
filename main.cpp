@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <cstdlib>
 #include <unistd.h>
 #include <cstddef>
 #include <cstdio>
@@ -49,6 +50,10 @@ int help(char **argv){
   printf("Use the man command for inforamtion on other programs");
 
   return 1;
+}
+
+int exit(char **argv){
+  return 0;
 }
 
 int main(int argc , char **argv){
